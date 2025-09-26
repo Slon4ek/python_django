@@ -1,0 +1,48 @@
+{% extends 'shopapp/base.html' %}
+
+{% block title %}
+    Shop Index
+{% endblock %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <table border="3" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr {% if product.quantity == 0 %}style="background-color: red;"{% endif %}>
+                    <td><strong>{{ product.name|upper }}</strong></td>
+                    <td>{{ product.description }}</td>
+                    <td>
+                        {% if product.quantity <= 0 %}
+                            Out of stock
+                        {% else %}
+                            {{ product.price|floatformat:2 }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if product.quantity <= 0 %}
+                            Out of stock
+                        {% else %}
+                            {{ product.quantity }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No products found</td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if products %}
+        <p>Total products: {{ products|length }}</p>
+    {% endif %}
+{% endblock %}
