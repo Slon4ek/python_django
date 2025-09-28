@@ -16,6 +16,8 @@
                     <th>User</th>
                     <th>Delivery Address</th>
                     <th>Promocode</th>
+                    <th>Order products</th>
+                    <th>Total price</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +27,14 @@
                         <td>{% firstof order.user.first_name order.user.username %}</td>
                         <td>{{ order.delivery_address }}</td>
                         <td>{{ order.promocode }}</td>
+                        <td>
+                            <ul>
+                                {% for product in order.products.all %}
+                                    <li>{{ product.name }} - {{ product.price }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ order.total_price }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
