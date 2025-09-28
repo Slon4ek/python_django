@@ -10,6 +10,5 @@ class Command(BaseCommand):
         products = Product.objects.all()
         for product in products:
             order.products.add(product)
-            order.total_price += product.price
         order.save()
         self.stdout.write(self.style.SUCCESS('Order updated successfully'))

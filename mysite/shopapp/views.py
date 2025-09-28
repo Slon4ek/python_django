@@ -22,6 +22,6 @@ def users_groups(request: HttpRequest):
 def orders_list(request: HttpRequest):
     context = {
         'title': 'Orders List',
-        'orders': Order.objects.select_related('user').all(),
+        'orders': Order.objects.select_related('user').prefetch_related('products').all(),
     }
     return render(request, 'shopapp/orders_list.html', context=context)
