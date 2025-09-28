@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -7,5 +8,14 @@ class Product(models.Model):
     quantity = models.IntegerField()
     description = models.TextField()
     discount = models.SmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Order(models.Model):
+    delivery_address = models.TextField(null=True, blank=True)
+    promocode = models.CharField(max_length=10, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    quantity = models.IntegerField(null=False, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

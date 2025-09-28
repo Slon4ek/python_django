@@ -1,7 +1,8 @@
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.contrib.auth.models import Group
-from .models import Product
+from .models import Product, Order
+
 
 # Create your views here.
 def shop_index(request: HttpRequest):
@@ -17,3 +18,10 @@ def users_groups(request: HttpRequest):
         'groups': Group.objects.prefetch_related('permissions').all(),
     }
     return render(request, 'shopapp/users_groups.html', context=context)
+
+def orders_list(request: HttpRequest):
+    context = {
+        'title': 'Orders List',
+        'orders': Order.objects.select_related('user').all(),
+    }
+    return render(request, 'shopapp/orders_list.html', context=context)
