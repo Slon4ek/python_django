@@ -21,8 +21,16 @@ class Product(models.Model):
     quantity = models.IntegerField()
     description = models.TextField()
     discount = models.SmallIntegerField(default=0)
+    archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def description_short(self):
+        return self.description[:48] + '...' if len(self.description) > 48 else self.description
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class Order(models.Model):
@@ -48,3 +56,13 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     products = models.ManyToManyField(Product, related_name='orders')
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self) -> str:
+        return f'Order {self.id} by {self.user.username}'
+
+    def save(self, *args, **kwargs):
+        self.total_price = sum([product.price for product in self.products.all()])
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['-created_at']
